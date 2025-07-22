@@ -48,22 +48,34 @@ document.addEventListener('click', (e) => {
         menuIcon.classList.replace('bx-x', 'bx-menu');
     }
 });
-// Certification Download Functionality
+// Certificate Download Functionality
 document.querySelectorAll('.download-btn').forEach(button => {
-  button.addEventListener('click', function() {
+  button.addEventListener('click', function(e) {
+    e.preventDefault();
     const fileName = this.getAttribute('data-file');
-    const certName = this.parentElement.querySelector('h4').textContent;
+    const filePath = `assets/${fileName}`; // Assuming certificates are in assets folder
     
     // Create temporary download link
     const link = document.createElement('a');
-    link.href = `assets/certifications/${fileName}`;
+    link.href = filePath;
     link.download = fileName;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
     
-    // Show download confirmation
-    alert(`Downloading ${certName} certificate...`);
+    // Check if file exists
+    fetch(filePath, { method: 'HEAD' })
+      .then(res => {
+        if (res.ok) {
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+        } else {
+          alert('Certificate file not found. Please contact me directly.');
+          console.error('File not found:', filePath);
+        }
+      })
+      .catch(err => {
+        alert('Error downloading certificate. Please try again later.');
+        console.error('Download error:', err);
+      });
   });
 });
 // CV Download
