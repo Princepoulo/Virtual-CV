@@ -67,13 +67,12 @@ document.querySelectorAll('.download-btn').forEach(button => {
   });
 });
 // CV Download
-document.getElementById('download-cv').addEventListener('click', function() {
-    const link = document.createElement('a');
-    link.href = './CV.pdf'; // Updated path
-    link.download = 'Jabulane_Poulo_CV.pdf';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+// In your script.js
+document.getElementById('download-cv').addEventListener('click', () => {
+  const link = document.createElement('a');
+  link.href = 'assets/CV.pdf';
+  link.download = 'Jabulane_Poulo_CV.pdf';
+  link.click();
 });
 
 // Certificates Download
