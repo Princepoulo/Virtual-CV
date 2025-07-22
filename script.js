@@ -50,34 +50,39 @@ document.addEventListener('click', (e) => {
 });
 // Certificate Download Functionality
 document.querySelectorAll('.download-btn').forEach(button => {
-  button.addEventListener('click', function(e) {
-    e.preventDefault();
-    const fileName = this.getAttribute('data-file');
-    const filePath = `assets/${fileName}`; // Assuming certificates are in assets folder
-    
-    // Create temporary download link
-    const link = document.createElement('a');
-    link.href = filePath;
-    link.download = fileName;
-    
-    // Check if file exists
-    fetch(filePath, { method: 'HEAD' })
-      .then(res => {
-        if (res.ok) {
-          document.body.appendChild(link);
-          link.click();
-          document.body.removeChild(link);
-        } else {
-          alert('Certificate file not found. Please contact me directly.');
-          console.error('File not found:', filePath);
+    button.addEventListener('click', async function(e) {
+        e.preventDefault();
+        
+        const fileName = this.getAttribute('data-file');
+        const certName = this.parentElement.querySelector('h4').textContent;
+        const filePath = `assets/${fileName}`;
+        
+        try {
+            // Check if file exists
+            const response = await fetch(filePath, { method: 'HEAD' });
+            
+            if (!response.ok) {
+                throw new Error('File not found on server');
+            }
+            
+            // Create download link
+            const link = document.createElement('a');
+            link.href = filePath;
+            link.download = fileName;
+            
+            // For better cross-browser support
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            console.log(`Downloading ${certName} certificate`);
+            
+        } catch (error) {
+            console.error('Download error:', error);
+            alert(`Could not download ${certName} certificate. Please contact me directly.`);
         }
-      })
-      .catch(err => {
-        alert('Error downloading certificate. Please try again later.');
-        console.error('Download error:', err);
-      });
-  });
-});
+    });
+})
 // CV Download
 // In your script.js
 document.getElementById('download-cv').addEventListener('click', () => {
