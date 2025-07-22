@@ -66,4 +66,26 @@ document.querySelectorAll('.download-btn').forEach(button => {
     alert(`Downloading ${certName} certificate...`);
   });
 });
+// CV Download
+document.getElementById('download-cv').addEventListener('click', function() {
+    const link = document.createElement('a');
+    link.href = './CV.pdf'; // Updated path
+    link.download = 'Jabulane_Poulo_CV.pdf';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+});
+
+// Certificates Download
+document.querySelectorAll('.download-btn').forEach(button => {
+  button.addEventListener('click', function() {
+    const fileName = this.getAttribute('data-file');
+    const link = document.createElement('a');
+    link.href = `./assets/certifications/${fileName}`; // Updated path
+    link.download = fileName;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  });
+});
 
